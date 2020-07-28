@@ -1,0 +1,395 @@
+{%extends 'blogbase.html'%}
+
+{%block title%}
+{{blog.title}}
+{%endblock title%}
+
+{%block headerextend%}
+{% load static %}
+<script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
+<script type="text/javascript" src='{% static "ckeditor/ckeditor/ckeditor.js" %}'></script>
+<style>
+	.django-ckeditor-widget{width:100%;}
+
+</style>
+{%endblock headerextend%}
+
+{%block blogactive%}
+active
+{%endblock blogactive%}
+
+{%block content%}
+<div class="container">
+      <div class="row">
+        <div class="col-sm-2">
+
+		</div>
+		<div class="panel panel-default col-sm-8">
+		  <div class="panel-heading">
+			  {%ifequal idlist|length index|add:1 %}
+			  <h3 class="panel-title" style="font-size: 40px;text-align: center;"><a href="{%url 'blog:showblog'%}?id={{idlist|previous:index}}&type={{blogtype}}" style="font-size: 20px;float: left;color: #28A4C9;">上一篇:{{previousblog.title}}</a>{{blog.title}}<a href="{%url 'blog:showblog'%}?id={{idlist|next:-1}}&type={{blogtype}}" style="font-size: 20px;float: right;color: #28A4C9;">下一篇:{{nextblog.title}}</a></h3>
+			  {%else%}
+			  <h3 class="panel-title" style="font-size: 40px;text-align: center;"><a href="{%url 'blog:showblog'%}?id={{idlist|previous:index}}&type={{blogtype}}" style="font-size: 20px;float: left;color: #28A4C9;">上一篇:{{previousblog.title}}</a>{{blog.title}}<a href="{%url 'blog:showblog'%}?id={{idlist|next:index}}&type={{blogtype}}" style="font-size: 20px;float: right;color: #28A4C9;">下一篇:{{nextblog.title}}</a></h3>
+			  {%endifequal%}
+
+		  </div>
+		  <div class="panel-body">
+
+			 <p style="text-align: center; font-size: 20px;"><span style="padding: 20px;">作者:{{blog.author}}</span>
+			 <span style="padding: 20px;">分类:<a href="{%url 'blog:showtype'%}?type={{blog.blogtype}}&page=1">{{blog.blogtype}}</a></span>
+			 <span style="padding: 20px;">发布日期:{{blog.updatetime}}</span><span class="markcount" style="padding: 20px;">评论数:{{commentscount|length}}</span></p>
+			  <p style="text-align: center; font-size: 20px;">
+				    <span style="padding-left:10px" numid="{{blog.id}}">点赞数:({{blog.bappreciatenum}})</span>
+			  {%if blog|has_appreciate:request%}
+			  <a appreciateid="{{blog.id}}" status="cancel" targeturl="{%url 'blog:appreciate'%}" class="appreciateclass" style="padding-left:10px;text-decoration:none;" href="javascript:;">取消点赞</a>
+			  {%else%}
+				{%if user.is_authenticated%}
+			  <a appreciateid="{{blog.id}}" status="appreciate" targeturl="{%url 'blog:appreciate'%}" class="appreciateclass" style="padding-left:10px;text-decoration:none;" href="javascript:;">点赞</a>
+				  {%else%}
+				  <a data-toggle="modal" data-target="#loginModal" style="padding-left:10px;text-decoration:none;cursor:pointer;">点赞</a>
+				  {%endif%}
+			  {%endif%}
+
+			  </p>
+			 <p style="font-size: 15px;">   {{blog.content|safe}}</p>
+
+		  </div>
+
+		</div>
+		  <a name="tiaozhuan"></a>
+		<div class="col-sm-2">
+
+		</div>
+    </div>
+	<div class="row">
+		<div class="col-sm-8 col-sm-offset-2">
+			<p id="tijiaotext" style="font-size:20px">----------------提交评论----------------</p>
+			  {%if user.is_authenticated%}
+				<p id="infoshow" style="font-size:40px">欢迎{{user}},当前用户可以评论</p>
+				<form id="commentupload" action="{%url 'comments:upload'%}" method="post" name="submitcomment">
+					{%csrf_token%}
+					{%for field in commentform%}
+					{{field}}
+					{%endfor%}
+				<button id="pinglun" type="submit" class="btn btn-danger pull-right">评论</button>
+				</form>
+				{%else%}
+
+				<form action="{%url 'login'%}?from={{request.get_full_path}}" method="post">
+					{%csrf_token%}
+			    <div class="form-group">
+			      <label for="username">UserName</label>
+			      <input type="text" class="form-control" name="username" id="username" placeholder="UserName">
+			    </div>
+			    <div class="form-group">
+			      <label for="password">PassWord</label>
+			      <input type="password" class="form-control" name="password" id="password" placeholder="PassWord">
+			    </div>
+					<a class="btn btn-default pull-left" href="{%url 'register'%}?from={{request.get_full_path}}" style="color:black;">注册</a>
+			    <button type="submit" class="btn btn-default pull-right">登录</button>
+			  </form>
+
+
+			{%include 'loginmodal.html'%}
+
+
+			{%endif%}
+			<p id="markcount1" style="font-size:20px; margin-top:120px;">----------------评论列表(总数:{{commentscount|length}})----------------</p>
+			<div id="commentlist">
+				{%for comment in comments%}
+					<div class="{{comment.id}}">
+						<span class="{{comment.id}}">用户名:{{comment.user}}({{comment.uploadtime|date:'Y-m-d H:i:s'}})说:{{comment.comment|safe}}</span>
+				{%ifequal comment.user request.user %}
+			<a id="{{comment.id}}" class="col-sm-2 col-sm-offset-10 removemark" href="javascript:;" style="text-decoration:none">删除评论</a>
+				{%endifequal%}
+						<span style="padding-left:10px" numid="{{comment.id}}">点赞数:({{comment.cappreciatenum}})</span>
+			  {%if comment|chas_appreciate:request%}
+			  <a appreciateid="{{comment.id}}" status="cancel" class="appreciateclass" style="padding-left:10px;text-decoration:none;" href="javascript:;">取消点赞</a>
+			  {%else%}
+				{%if user.is_authenticated%}
+			  <a appreciateid="{{comment.id}}" status="appreciate" class="appreciateclass" style="padding-left:10px;text-decoration:none;" href="javascript:;">点赞</a>
+				{%else%}
+				<a data-toggle="modal" data-target="#loginModal" style="padding-left:10px;text-decoration:none;cursor:pointer;">点赞</a>
+				{%endif%}
+			  {%endif%}
+				<hr>
+					{%for reply in comment.parent_comment.all%}
+						<div class="{{reply.id}}">
+					<span class="{{reply.id}}" style="padding:30px;">{{reply.user.username}}回复{{reply.reply_user.username}}({{reply.uploadtime|date:'Y-m-d H:i:s'}})说:{{reply.comment|safe}}</span>
+					<a class="pull-right huifu" urltar="{{reply.id}}" parent="{{comment.id}}" href="#tiaozhuan" id="{{reply.user}}" neirong="{{reply.comment|safe}}" style="text-decoration:none;">回复</a>
+					{%ifequal reply.user.username request.user.username %}
+					<a id="{{reply.id}}" class="pull-right removemark" href="javascript:;" style="text-decoration:none;padding-right:20px">删除回复</a>
+					{%endifequal%}
+							 <span style="padding-left:10px" numid="{{reply.id}}">点赞数:({{reply.cappreciatenum}})</span>
+			  {%if reply|chas_appreciate:request%}
+			  <a appreciateid="{{reply.id}}" status="cancel" class="appreciateclass" style="padding-left:10px;text-decoration:none;" href="javascript:;">取消点赞</a>
+			  {%else%}
+				{%if user.is_authenticated%}
+			  <a appreciateid="{{reply.id}}" status="appreciate" class="appreciateclass" style="padding-left:10px;text-decoration:none;" href="javascript:;">点赞</a>
+				{%else%}
+				<a data-toggle="modal" data-target="#loginModal" style="padding-left:10px;text-decoration:none;cursor:pointer;">点赞</a>
+				{%endif%}
+			  {%endif%}
+				<hr>
+							</div>
+				{%endfor%}
+				<a  class="btn btn-default huifu"  href="#tiaozhuan" id="{{comment.user}}" urltar="{{comment.id}}" parent="{{comment.id}}" neirong="{{comment.comment|safe}}">回复</a>
+				<hr>
+					</div>
+				{%empty%}
+				<p id="non-comment" style="font-size:20px;margin-left:42px">-------当前暂无评论-------</p>
+			{%endfor%}
+			</div>
+		</div>
+	</div>
+</div>
+
+{%endblock content%}
+{%block jsextend%}
+<script type="text/javascript">
+	var commentnum = {{commentscount|length}}
+	$(function(){
+				var $p = $('#commentlist p')
+				for (var i = 0 ; i<$p.length;i++){$($p[i]).css('padding-left','30px')}
+				$('#commentupload').submit(function(){
+				CKEDITOR.instances["id_commentcontent"].updateElement()
+						$.ajax({
+								type:'POST',
+								url:$(this).attr('action'),
+								data:$('#commentupload').serialize(),
+								cache:false,
+								success:function(data){
+										if(data.status === 'wrong'){
+												$('#errmsg').remove()
+												var $erromsg = $('<p>' + data.errormsg + '</p>')
+												$errmsg.attr('id','errmsg')
+												$errmsg.css('font-size','20px')
+												$errmsg.css('color','red')
+												$('#commentupload').after($errmsg)
+										}
+										if (data.status === 'error'){
+												$('#errmsg').remove()
+												var $errmsg = $('<p>检查评论长度是否小于6个字符</p>')
+												$errmsg.attr('id','errmsg')
+												$errmsg.css('font-size','20px')
+												$errmsg.css('color','red')
+												$('#commentupload').after($errmsg)
+										}else{
+											if($('#non-comment').get(0)){$('#non-comment').remove()}
+											commentnum += 1
+													$('#markcount1').html('----------------评论列表(总数:' + commentnum + ')----------------')
+											$('.markcount').html('评论数:' + commentnum)
+											var user = data.user
+											var reply_user = data.reply_user
+											uploadtime = data.uploadtime
+											comment = data.comment
+											if(data.reply_user){
+												var reply_user = data.reply_user
+												$comment = $(comment)
+												$comment.css('padding-left','30px')
+												var $newele = $('<span>'+ user + '回复' + reply_user + '('+ uploadtime +')说:</span>')
+												$newele.css('padding-left','30px')
+												$newele.addClass('' + data.commentid)
+												$newele.append($comment)
+												var $divreply = $('<div></div>')
+												$divreply.addClass('' + data.commentid)
+												$divreply.append($newele)
+												var $marka = $('<a>回复</a>')
+												$marka.attr('id',data.huifuuser)
+												$marka.attr('href','#tiaozhuan')
+												$marka.attr('urltar',data.huifuurltar)
+												$marka.attr('parent',data.parent)
+												$marka.attr('neirong',data.comment)
+												$marka.addClass('pull-right huifu')
+												$marka.css('text-decoration','none')
+												$divreply.append($marka)
+												var $removea = $('<a>删除回复</a>')
+												$removea.attr('id',data.commentid)
+												$removea.attr('href','javascript:;')
+												$removea.addClass('pull-right removemark')
+												$removea.css('text-decoration','none')
+												$removea.css('padding-right','20px')
+												$divreply.append($removea)
+												var $span = $('<span>点赞数:(' + data.appreciatenum + ')</span>')
+												$span.attr('numid',data.commentid)
+												$span.css('padding-left','40px')
+												$divreply.append($span)
+												var $apprecia = $('<a>点赞</a>')
+												$apprecia.attr('appreciateid',data.commentid)
+												$apprecia.attr('status','appreciate')
+												$apprecia.attr('href','javascript:;')
+												$apprecia.addClass('appreciateclass')
+												$apprecia.css('padding-left','10px')
+												$apprecia.css('text-decoration','none')
+												$apprecia.bind('click',dianzan)
+												$divreply.append($apprecia)
+												$divreply.append($('<hr>'))
+												$('a[urltar='+ data.parent +']').before($divreply)
+										CKEDITOR.instances["id_commentcontent"].setData('')
+
+										/*
+										var $marka = $('<a>回复</a>')
+										$marka.attr('id',data.huifuuser)
+										$marka.attr('href','javascript:;')
+										$marka.attr('urltar',data.huifuurltar)
+										$marka.attr('parent',data.parent)
+										$marka.attr('neirong',data.comment)
+										$marka.addClass('pull-right huifu')
+										$marka.css('text-decoration','none')
+										$('a[urltar='+ data.parent +']').before($marka)
+										var $removea = $('<a>删除回复</a>')
+										$removea.attr('id',data.commentid)
+										$removea.attr('href','javascript:;')
+										$removea.addClass('pull-right removemark')
+										$removea.css('text-decoration','none')
+										$removea.css('padding-right','20px')
+										$marka.after($removea)
+										$removea.after($('<hr>'))
+										*/
+
+											}else{
+												$newele = $('<span>'+ user + '('+ uploadtime +')说:'+  comment +'</span>')
+												$newele.addClass('' + data.id)
+												var $div = $('<div></div>')
+												$div.addClass('' + data.id)
+												$div.append($newele)
+												var $removea = $('<a>删除评论</a>')
+												$removea.attr('id',data.id)
+												$removea.attr('href','javascript:;')
+												$removea.addClass('col-sm-2 col-sm-offset-10 removemark')
+												$removea.css('text-decoration','none')
+												$div.append($removea)
+												var $span = $('<span>点赞数:(' + data.appreciatenum + ')</span>')
+												$span.attr('numid',data.id)
+												$span.css('padding-left','10px')
+												$div.append($span)
+												var $apprecia = $('<a>点赞</a>')
+												$apprecia.attr('appreciateid',data.id)
+												$apprecia.attr('status','appreciate')
+												$apprecia.attr('href','javascript:;')
+												$apprecia.addClass('appreciateclass')
+												$apprecia.css('padding-left','10px')
+												$apprecia.css('text-decoration','none')
+												$apprecia.bind('click',dianzan)
+												$div.append($apprecia)
+												$div.append($('<hr>'))
+												var $newa = $('<a>回复</a>')
+												$newa.attr('urltar',data.id)
+												$newa.attr('parent',data.id)
+												$newa.attr('href',"#tiaozhuan")
+												$newa.attr('id',"{{request.user}}")
+												var neirong = $(comment).text()
+												$newa.attr('neirong',neirong)
+												$newa.addClass('btn btn-default huifu')
+												$div.append($newa)
+												$div.append($('<hr>'))
+												$('#commentlist').prepend($div)
+												/*
+												$hr = $('<hr>')
+												$newa = $('<a>回复</a>')
+												$newa.attr('urltar',data.id)
+												$newa.attr('href',"#tiaozhuan")
+												$newa.attr('id',"{{request.user}}")
+												var neirong = $(comment).text()
+												$newa.attr('neirong',neirong)
+												$newa.addClass('btn btn-default huifu')
+												$('#commentlist').prepend($newele)
+												$newele.after($hr)
+												$hr.after($removea)
+												$newa.after($('<hr>'))
+												*/
+										CKEDITOR.instances["id_commentcontent"].setData('')
+										//$('span[class=' + data.id + ']').after($removea)
+											}
+										}
+									monitorchange()
+									changeback()
+									getremovetag()
+								},
+								error:function(xhr){
+									console.log(xhr)
+								},
+						})
+						return false
+				})
+				function monitorchange(){
+						var $huifu = $('.huifu')
+						$huifu.bind('click',function(){
+						CKEDITOR.instances["id_commentcontent"].focus()
+						var user = $(this).attr('id')
+						var comment = $(this).attr('neirong')
+						$('#tijiaotext').html('----------------提交回复----------------')
+						$('#infoshow').html('回复'+user+':'+comment)
+						$('#pinglun').html('回复')
+						var urltar = $(this).attr('urltar')
+						var $inputurltar = $('<input>')
+						$inputurltar.attr('type','hidden')
+						$inputurltar.attr('name','urltar')
+						$inputurltar.attr('value',urltar)
+						$('#commentupload').append($inputurltar)
+						var parent = $(this).attr('parent')
+						var $inputparent = $('<input>')
+						$inputparent.attr('type','hidden')
+						$inputparent.attr('name','parent')
+						$inputparent.attr('value',parent)
+						$('#commentupload').append($inputparent)
+						$('#commentupload').attr('action','{%url 'comments:mark'%}')
+
+				})
+				}
+				function changeback(){
+						CKEDITOR.instances["id_commentcontent"].focus()
+						$('#tijiaotext').html('----------------提交评论----------------')
+						$('#infoshow').html('欢迎{{user}},当前用户可以评论')
+						$('#pinglun').html('评论')
+						$('#commentupload').attr('action','{%url 'comments:upload'%}')
+				}
+				function removemark(){
+						var commentid = $(this).attr('id'),
+							data = {}
+						data.id = commentid
+						$.ajax({
+								type:'get',
+								url:'{%url 'comments:removemark'%}',
+								data:data,
+								cache:false,
+								success:function(data){
+										if (data.status === 'success'){
+												$('a[id=' + data.removeid + ']').html('删除成功！')
+												setTimeout(function(){
+													//$('[class=' + data.removeid + ']').remove()
+													//$('a[id=' + data.removeid + ']').remove()
+													//$('a[urltar=' + data.removeid + ']').remove()
+													$('div[class=' + data.removeid + ']').remove()
+													commentnum -= 1
+													$('#markcount1').html('----------------评论列表(总数:' + commentnum + ')----------------')
+											$('.markcount').html('评论数:' + commentnum)
+											if(!$('#commentlist').get(0).innerText){
+											var $pneed = $('<p>-------当前暂无评论-------</p>')
+											$pneed.attr('id','non-comment')
+											$pneed.css('font-size','20px')
+											$pneed.css('margin-left','42px')
+											$pneed.css('padding-left','30px')
+											$('#commentlist').append($pneed)
+											}
+												},2000)
+										}
+								},
+								error:function(xhr){
+									console.log(xhr)
+								},
+						})
+				}
+				function getremovetag(){
+						$('.removemark').bind('click',removemark)
+				}
+
+				{%url 'comments:cappreciate' as url%}
+				{%include 'blog/appreciate.html' with url=url%}
+				getremovetag()
+				monitorchange()
+
+		})
+	</script>
+
+{%endblock jsextend%}

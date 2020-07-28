@@ -1,0 +1,69 @@
+function appreciatebind(){
+					var $appreciatea = $('a[class="appreciateclass"]')
+					$appreciatea.bind('click',dianzan)
+			}
+				function dianzan(){
+									data = {}
+									data.csrfmiddlewaretoken = '{{ csrf_token }}'
+									data.blogid = $(this).attr('appreciateid')
+									data.status = $(this).attr('status')
+									targeturl = $(this).attr('targeturl')
+									$appreciateused = $(this)
+									$.ajax({
+										type:'post',
+										url:targeturl || '{{url}}',
+										data:data,
+										cache:false,
+										success:function(data){
+											if (data.status === 'success'){
+													if (data.operate === 'appreciate'){
+														$('span[numid=' + $appreciateused.attr('appreciateid') + ']').html('点赞数:(' +  data.num + ')')
+													setTimeout(function(){
+															$appreciateused.attr('status','cancel')
+															$appreciateused.html('取消点赞')
+													},0)
+													}else{
+														$('span[numid=' + $appreciateused.attr('appreciateid') + ']').html('点赞数:(' +  data.num + ')')
+													setTimeout(function(){
+															$appreciateused.attr('status','appreciate')
+															$appreciateused.html('点赞')
+													},0)
+													}
+											}else{
+											var $warninfo = $('<span>' + data.errormsg +'</span>')
+											$warninfo.css('padding-left','10px')
+											$warninfo.css('color','red')
+											$appreciateused.after($warninfo)
+											setTimeout(function(){$warninfo.remove()},1500)
+											}
+										},
+										error:function(xhr){
+													console.log(xhr)
+										},
+									})
+					}
+			appreciatebind()
+
+$('#modal-form').submit(function(){
+	$.ajax({
+		type:'post',
+		data:$(this).serialize(),
+		url:$(this).attr('action'),
+		cache:false,
+		success:function(data){
+			if (data.status === 'success'){
+					window.location.reload()
+		}else{
+			$('#danger').html(data.errormsg)
+			setTimeout(function(){$('#danger').html('')},2000)
+		}
+},
+		error:function(xhr){
+			console.log(xhr)
+},
+})
+	return false
+
+})
+
+

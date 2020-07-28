@@ -1,0 +1,183 @@
+{%extends 'blogbase.html'%}
+
+{%block title%}
+{{type}}
+{%endblock title%}
+
+{%block blogactive%}
+active
+{%endblock blogactive%}
+
+{%block content%}
+<div class="container">
+<div class="row">
+    <div class="col-sm-1">
+
+		</div>
+		<div class="panel panel-default col-sm-6">
+		  <div class="panel-heading">
+			  {%if allpage%}
+		    <h3 class="panel-title">当前分类:{{type}}(一共有{{blogtype2|length}}篇文章  当前页{{page}}/{{allpage}})<button type="button" class="btn btn-default" style="margin-left:20px;"><a href="{%url 'blog:allblogs'%}" style="color: blue;text-decoration: none;font-family:times;">返回博客主页</a></button></h3>
+		 	{%else%}
+			  <h3 class="panel-title">当前分类:{{type}}(一共有{{blogtype2|length}}篇文章)<button type="button" class="btn btn-default" style="margin-left:20px;"><a href="{%url 'blog:allblogs'%}" style="color: blue;text-decoration: none;font-family:times;">返回博客主页</a></button></h3>
+		 	{%endif%}
+		  </div>
+			{%include 'loginmodal.html'%}
+		  <div class="panel-body">
+              {%for blog in blogtype%}
+               <h2><a href="{%url 'blog:showblog'%}?id={{blog.id}}&type={{blog.blogtype}}">{{blog.title}}</a></h2>
+			<span class="glyphicon glyphicon-tag" aria-hidden="true"></span>
+			<span><a href="{%url 'blog:showtype'%}?type={{blog.blogtype}}&page=1">{{blog.blogtype}}</a></span>
+			<span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+			<span>{{blog.updatetime|date:'Y-m-d H:m:s'}}</span>
+			  <span style="padding-left:10px">评论数:({{blog|getmarkcount|length}})</span>
+			  <span style="padding-left:10px" numid="{{blog.id}}">点赞数:({{blog.bappreciatenum}})</span>
+			   {%if blog|has_appreciate:request%}
+			  <a appreciateid="{{blog.id}}" status="cancel" class="appreciateclass" style="padding-left:10px;text-decoration:none;" href="javascript:;">取消点赞</a>
+			  {%else%}
+			  {%if user.is_authenticated%}
+			  <a appreciateid="{{blog.id}}" status="appreciate" class="appreciateclass" style="padding-left:10px;text-decoration:none;" href="javascript:;">点赞</a>
+			  {%else%}
+			  <a data-toggle="modal" data-target="#loginModal" style="padding-left:10px;text-decoration:none;cursor:pointer;">点赞</a>
+			  {%endif%}
+			  {%endif%}
+			<p>{{blog.content|truncatechars:15}}</p>
+			<hr >
+			  {%empty%}
+			  <h2>----当前分类下暂无博客----</h2>
+			  {%endfor%}
+		  </div>
+
+
+
+			<!--	分页条这一块最好不要乱动了		-->
+				  {%if allpage%}
+			<nav aria-label="Page navigation" class="text-center">
+			    <ul class="pagination">
+					{%ifequal page 1%}
+			      <li class="disabled">
+					  <a href="#" aria-label="Previous">
+			          <span aria-hidden="true">&laquo;</span>
+			        </a>
+					   </li>
+					  {%else%}
+					<li>
+					  <a href="{%url 'blog:showtype'%}?type={{type}}&page={{page|add:-1}}&year={{year}}&month={{month}}&day={{day}}" aria-label="Previous">
+			          <span aria-hidden="true">&laquo;</span>
+			        </a>
+			      </li>
+					{%endifequal%}
+
+
+					{%if allpage <= pageshow%}
+					{%for i in allpage|getrange%}
+					{%ifequal i|add:1 page%}
+					<li class="active"><a href="{%url 'blog:showtype'%}?type={{type}}&page={{i|add:1}}&year={{year}}&month={{month}}&day={{day}}">{{i|add:1}}</a></li>
+					{%else%}
+					<li><a href="{%url 'blog:showtype'%}?type={{type}}&page={{i|add:1}}&year={{year}}&month={{month}}&day={{day}}">{{i|add:1}}</a></li>
+					{%endifequal%}
+					{%endfor%}
+					{%else%}
+					{%if allpage|jianfa:page|add:1 < pageshow %}
+					{%for i in allpage|add:-5|getrangequjian:allpage%}
+					{%ifequal i|add:1 page%}
+					<li class="active"><a href="{%url 'blog:showtype'%}?type={{type}}&page={{i|add:1}}&year={{year}}&month={{month}}&day={{day}}">{{i|add:1}}</a></li>
+					{%else%}
+					<li><a href="{%url 'blog:showtype'%}?type={{type}}&page={{i|add:1}}&year={{year}}&month={{month}}&day={{day}}">{{i|add:1}}</a></li>
+					{%endifequal%}
+					{%endfor%}
+					{%else%}
+					{%for i in pagerange%}
+					{%ifequal i|add:1 page%}
+					<li class="active"><a href="{%url 'blog:showtype'%}?type={{type}}&page={{i|add:1}}&year={{year}}&month={{month}}&day={{day}}">{{i|add:1}}</a></li>
+					{%else%}
+					<li><a href="{%url 'blog:showtype'%}?type={{type}}&page={{i|add:1}}&year={{year}}&month={{month}}&day={{day}}">{{i|add:1}}</a></li>
+					{%endifequal%}
+					{%endfor%}
+					{%endif%}
+					{%endif%}
+
+
+			     	{%ifequal allpage page%}
+					 <li class="disabled">
+			        <a href="#" aria-label="Next">
+			          <span aria-hidden="true">&raquo;</span>
+			        </a>
+			      </li>
+					{%else%}
+					 <li>
+			        <a href="{%url 'blog:showtype'%}?type={{type}}&page={{page|add:1}}&year={{year}}&month={{month}}&day={{day}}" aria-label="Next">
+			          <span aria-hidden="true">&raquo;</span>
+			        </a>
+			      </li>
+					{%endifequal%}
+					<input type="text" id="pagenum" value="" style="margin-left:10px;width: 40.55px;height:34px">
+				  <button type="button" id="btnjump" class="btn btn-danger" style="width: 50px;height:34px;" >跳转</button>
+			    </ul>
+			  </nav>
+			{%endif%}
+
+
+
+
+
+		</div>
+		<div class="col-sm-1">
+
+		</div>
+		<div class="panel panel-default col-sm-3">
+		  <div class="panel-heading">
+		    <h3 class="panel-title">博客分类</h3>
+		  </div>
+		  <div class="panel-body">
+		    {%for blogt in blogtype1%}
+			   <h4><a href="{%url 'blog:showtype'%}?type={{blogt.blogtype1}}&page=1">{{blogt.blogtype1}}(共有{{blogt.blog_set.count}}篇)</a></h4>
+			 {%empty%}
+			  <h4>----暂无分类----</h4>
+			  {%endfor%}
+		  </div>
+			<div class="panel-heading" style="margin-top: 100px;">
+			    <h3 class="panel-title">按月分类</h3>
+			  </div>
+			  <div class="panel-body">
+				  {%for blog_date in blogdate%}
+			    <h4 style="display: inline-block;padding: 8px;"><a href="{%url 'blog:allblogs'%}?year={{blog_date.year}}&month={{blog_date.month}}">{{blog_date|date:'Y-m'}}</a></h4>
+				  {%endfor%}
+			</div>
+			{%if blogtype2%}
+			<span style="font-size:3px">精确查找:年：</span>
+			<input id="year" type="text" style="width:30px">
+			<span style="font-size:3px">月：</span>
+			<input id="month"  type="text" style="width:30px">
+			<span style="font-size:3px">日：</span>
+			<input id="day" type="text" style="width:30px">
+			<button id="btnsearch" class="btn btn-info pull-right" type="button" style="margin-top:10px">搜索</button>
+			{%else%}
+			<h2 style="text-align:center;margin:0">无</h2>
+			{%endif%}
+		</div>
+		<div class="col-sm-1">
+
+		</div>
+    </div>
+</div>
+
+{%endblock content%}
+{%block jsextend%}
+<script type="text/javascript">
+		$(function(){
+			$("#btnjump").bind('click',function(){
+				val = $("#pagenum").val()
+				window.location.href = '?type={{type}}&page=' + val
+			})
+			$("#btnsearch").bind('click',function(){
+				var year = $("#year").val()
+				var month = $("#month").val()
+				var day = $("#day").val()
+				window.location.href = "?type={{type}}&page=1&year=" + year + "&month=" + month + "&day=" + day
+			})
+			{%url 'blog:appreciate' as url%}
+			{%include 'blog/appreciate.html' with url=url%}
+		})
+	</script>
+{%endblock jsextend%}

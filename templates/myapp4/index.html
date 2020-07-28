@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>主页</title>
+</head>
+<body>
+    {%for art in articlelist%}
+    <h1><a href="{%url 'myapp4:showarticle' art.id%}">{{art.title}}</a></h1>
+    {%endfor%}
+</body>
+</html>

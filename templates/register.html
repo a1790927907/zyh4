@@ -1,0 +1,41 @@
+{%extends 'blogbase.html'%}
+{%block title%}
+注册
+{%endblock title%}
+{%block headerextend%}
+<style>
+    ul{
+        list-style:none;
+        }
+</style>
+
+{%endblock headerextend%}
+{%block content%}
+  <div class="container">
+      <div class="row">
+            <div class="col-sm-4 col-sm-offset-4" >
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">注册</h3>
+      </div>
+      <div class="panel-body">
+         <form action="{%url 'register'%}?from={{from1}}" method="post">
+             {%csrf_token%}
+              {{registerform}}
+             <button type="submit" class="btn btn-default pull-right">注册</button>
+          </form>
+      </div>
+      </div>
+  </div>
+{%endblock content%}
+
+
+
+
+
+
+
+
+
+
+
