@@ -8,8 +8,90 @@
 active
 {%endblock indexactive%}
 
+{%block headerextend%}
+<link rel="stylesheet" type="text/css" href="/static/css/font-awesome.min.css"/>
+	<link rel="stylesheet" type="text/css" href="/static/css/main.css"/>
+<style type="text/css">
+		*{margin:0;padding:0}
+		#box1{
+			width: 100%;
+			height:100%;
+			background: url(/static/img/pic6.webp);
+			background-repeat: no-repeat;
+			background-attachment: fixed;
+			background-size: 100% 100%;
+			opacity: 0.9;
+
+		}
+		.btn{line-height:1;}
+	</style>
+{%endblock headerextend%}
+
 {%block content%}
-    	<div id="box1" style="position: absolute;top: 40%;left: 75px;">
-			<p style="font-size: 120px;text-align: center;line-height: 130px;">欢迎来到个人博客网站</p>
+	<style>
+		body{margin-top:0;margin-bottom:0}
+		div.panel-main__inner{
+			display:table-caption;
+			padding:80px 50px;
+		}
+
+
+	</style>
+
+    	<div id="box1">
+
+<div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+        <a data-toggle="modal" data-target="#loginModal" title="联系作者" style="cursor:pointer"><img src="/static/img/few.jpg" width="150" alt="Noisky logo" class="panel-cover__logo logo"></a>
+	   <h1 class="panel-cover__title panel-title"><a href="http://www.yanwz.cn/" title="link to homepage for noisky"></a></h1>
+
+        <hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <p class="panel-cover__description" style="font-size:16.5px;">欢迎来到我的个人里世界!</p>
+
+
+	<p class="footer"> © 2020  |  <a style="TEXT-DECORATION: none" rel="nofollow" target="_blank"><font color="#b3b3b3">zyh</font></a></p>
+
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary" style="margin-left:30px;">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="{%url 'blog:allblogs'%}" title="访问博客">博客</a></li>
+
+                <li class="navigation__item"><a href="" target="_blank" title="未定">未定</a></li>
+
+                <li class="navigation__item"><a href="" title="未定">未定</a></li>
+
+                <li class="navigation__item"><a href="" title="未定">未定</a></li>
+
+                <li class="navigation__item"><a href="" title="未定">未定</a></li>
+              </ul>
+            </nav>
+          </div>
+      </div>
+    </div>
+
+  </div>
+		</div>
+
+		</div>
+<div class="modal fade bs-example-modal-lg" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		  <div class="modal-dialog modal-md" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        <h4 class="modal-title" id="myModalLabel">QQ二维码</h4>
+		      </div>
+				<div class="modal-body">
+        <img src="/static/img/QRcode.jpg">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+      </div>
+
+		    </div>
+		  </div>
 		</div>
 {%endblock content%}
