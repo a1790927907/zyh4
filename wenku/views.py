@@ -23,7 +23,7 @@ from wenku.models import Wenku
 import os
 def documents(request):
     title = request.GET.get('title')
-    file = open(f"{title}",'rb')
+    file = open(f'./static_all/file/{title}','rb')
     response = FileResponse(file)
     response['Content-Type'] = 'application/octet-stream'
     from django.utils.http import urlquote
@@ -31,7 +31,7 @@ def documents(request):
     return response
 
 def removefile(request):
-    for i,j,k in os.walk("."):
+    for i,j,k in os.walk("./static_all/file"):
         for filename in k:
             os.remove(f"{filename}")
     return JsonResponse({'status':'removesuccess'})
