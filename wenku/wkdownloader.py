@@ -68,7 +68,7 @@ def getdocwithtxt(url):
                 '''
             except:
                 continue
-    with open(f"{title}.txt","w",encoding="utf-8") as f:
+    with open(f"media/upload/{title}.txt","w",encoding="utf-8") as f:
         f.write(result)
     return ('success',title)
 def getdocwithword(url):
@@ -89,10 +89,10 @@ def getdocwithword(url):
     except:
         pagenum = 0
     try:
-        title = re.findall(r'<title>(.*?)</title>', res.text)[0]
-        title = title.replace('&nbsp;', '').replace('- 百度文库', '')
+        title1 = re.findall(r'<title>(.*?)</title>', res.text)[0]
+        title1 = title1.replace('&nbsp;', '').replace('- 百度文库', '')
     except:
-        title = '未知标题'
+        title1 = '未知标题'
     targeturllist = []
     for urltuple in urllist:
         for target in urltuple:
@@ -133,7 +133,7 @@ def getdocwithword(url):
     # 加入不同等级的标题
     head = document.add_heading('', 1)
     head.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    head = head.add_run(f'{title}')
+    head = head.add_run(f'{title1}')
     head.font.name = '黑体'
     h = head._element
     h.rPr.rFonts.set(qn('w:eastAsia'), '黑体')
@@ -147,7 +147,7 @@ def getdocwithword(url):
     r = run._element
     r.rPr.rFonts.set(qn('w:eastAsia'), '宋体')
     # 保存文件
-    document.save(f'{title}.docx')
+    document.save(f'media/upload/{title}.docx')
     return ('success',title)
 
 if __name__ == '__main__':
