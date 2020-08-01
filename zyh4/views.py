@@ -63,6 +63,14 @@ def register(request):
     params['registerform'] = registerform
     return render(request,'register.html',params)
 
+def error403(request):
+    return render(request,'403.html')
+
+def error404(request):
+    return render(request,'404.html')
+
+def error500(request):
+    return render(request,'500.html')
 
 
 

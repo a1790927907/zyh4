@@ -1,0 +1,191 @@
+{%extends 'blogbase.html'%}
+{%block title%}
+文库下载工具
+{%endblock title%}
+{%block wenkuactive%}
+active
+{%endblock wenkuactive%}
+{%block headerextend%}
+<link rel="stylesheet" href="/static/css/wenku.css" media="screen" type="text/css" />
+<style type="text/css">
+		*{margin:0;padding:0}
+		#wenkubox{
+		    background-image: url(/static/img/pic1.webp);
+            display: block;
+            width: 100%;
+            height: 100%;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            position: absolute;
+            left: 0;
+            top: 0;
+            overflow: hidden;
+            opacity: 1;
+            transition: 1s ease opacity;
+}
+body{margin-top:72px;margin-bottom:72px}
+#txttype{
+	transform: translate(4.5px);
+}
+.danxuan {
+  -webkit-appearance: none; /* remove default */
+  transform: translateY(-2.7px);
+  display: inline-block;
+  margin: 10px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  cursor: pointer;
+  vertical-align: middle;
+  box-shadow: hsla(0,0%,100%,.15) 0 1px 1px, inset hsla(0,0%,0%,.5) 0 0 0 1px;
+  background-color: hsla(0,0%,0%,.2);
+  background-image: -webkit-radial-gradient( hsla(200,100%,90%,1) 0%, hsla(200,100%,70%,1) 15%, hsla(200,100%,60%,.3) 28%, hsla(200,100%,30%,0) 70% );
+  background-repeat: no-repeat;
+  -webkit-transition: background-position .15s cubic-bezier(.8, 0, 1, 1),
+    -webkit-transform .25s cubic-bezier(.8, 0, 1, 1);
+}
+.danxuan:checked {
+  -webkit-transition: background-position .2s .15s cubic-bezier(0, 0, .2, 1),
+    -webkit-transform .25s cubic-bezier(0, 0, .2, 1);
+}
+.danxuan:active {
+  -webkit-transform: scale(1.5);
+  -webkit-transition: -webkit-transform .1s cubic-bezier(0, 0, .2, 1);
+}
+
+
+/* The up/down direction logic */
+
+.danxuan,
+.danxuan:active {
+  background-position: 0 24px;
+}
+.danxuan:checked {
+  background-position: 0 0;
+}
+.danxuan:checked ~ .danxuan,
+.danxuan:checked ~ .danxuan:active {
+  background-position: 0 -24px;
+}
+	</style>
+{%endblock headerextend%}
+
+{%block content%}
+<div id="wenkubox" class="container">
+  <div class="panel_1">
+	  <div class="row">
+	<div class="col-sm-3">
+		 	<input type="radio" name="wktype" class="danxuan" checked value="bdwk" /><span style="font-size: 16px;color: #C7254E;font-family:Arial,Helvetica,sans-serif;">百度文库</span>
+		 </div>
+</div>
+  <div class="wrap">
+   <form id="parsewk" action="{%url 'wenku:downloader'%}" method="post">
+	   {%csrf_token%}
+   	<input type="text" name="wkurl" placeholder="输入文库url" required value=""/>
+   	<button type="submit" class="btn btn-primary" id="parse">解析</button>
+   </form>
+  </div>
+ <div class="row" id="dangersupport">
+ 	<div class="col-sm-2" id="txttype">
+ 		 	<input type="radio" name="wenbentype" class="danxuan" checked value="txt" /><span style="font-size: 16px;color: #C7254E;font-family:Arial,Helvetica,sans-serif;">TXT</span>
+ 		 </div>
+	<div class="col-sm-3" id="wordtype">
+		 	<input type="radio" name="wenbentype" class="danxuan" checked value="word" /><span style="font-size: 16px;color: #C7254E;font-family:Arial,Helvetica,sans-serif;">Word</span>
+		 </div>
+ </div>
+</div>
+<div style="text-align:center;clear:both">
+
+</div>
+
+</div>
+
+{%endblock content%}
+
+
+{%block jsextend%}
+	<script type="text/javascript">
+		$(function(){
+				function formatstr(str,data){
+						var newdata = str.split('&')
+						for(var i = 0;i<newdata.length;i++){
+								data[newdata[i].split('=')[0]] = newdata[i].split('=')[1]
+						}
+				}
+				$('#parsewk').submit(function(){
+						var data = {}
+						formatstr($(this).serialize(),data)
+						var $wktype = $('[name="wktype"]')
+						var $wenbentype = $('[name="wenbentype"]')
+						for (var i=0;i<$wktype.length;i++){
+							if($wktype[i].checked){
+								data.wktype = $($wktype[i]).val()
+								break
+							}
+						}
+						for (var j=0;j<$wenbentype.length;j++){
+							if($wenbentype[j].checked){
+								data.wenbentype = $($wenbentype[j]).val()
+								break
+							}
+						}
+						var newdata = {csrfmiddlewaretoken:'{{csrf_token}}'}
+						$.ajax({
+							type:'post',
+							url:'{%url 'wenku:secretset'%}',
+							data:newdata,
+							success:function(data){
+									if(data.status != 'success'){
+										/*var $span = $('<span>出错啦！检查是否登录！</span>')
+										$span.css('font-size','30px')
+										$span.css('color','crimson')
+										$('#dangersupport').after($span)
+										setTimeout(function(){
+											$span.remove()
+										},2000)*/
+										window.location.href = '{%url '403page'%}'
+									}
+							},
+							error:function(xhr){
+									var $span = $('<span>出错啦！请联系管理员！</span>')
+										$span.css('font-size','30px')
+										$span.css('color','crimson')
+										$('#dangersupport').after($span)
+										setTimeout(function(){
+											$span.remove()
+										},9000)
+							},
+
+						})
+						setTimeout(function(){
+						$.ajax({
+							type:'post',
+							url:'{%url 'wenku:downloader'%}',
+							data:data,
+							success:function(data){
+									if(data.status == 'success'){
+											window.location.href = data.downloadurl
+
+									}else{
+										var $span = $('<span>' + data.erromsg + '</span>')
+										$span.css('font-size','30px')
+										$span.css('color','crimson')
+										$('#dangersupport').after($span)
+										setTimeout(function(){
+											$span.remove()
+										},3000)
+
+									}
+							},
+							error:function(xhr){
+									window.location.href = '{%url '500page'%}'
+							},
+						})
+						},2000)
+						return false
+				})
+		})
+	</script>
+
+{%endblock jsextend%}

@@ -19,7 +19,7 @@ from zyh4.views import *
 from django.conf import settings
 from django.conf.urls.static import static
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    url(r'^adminzyhzoneZYHZONE/', admin.site.urls),
     url(r'^myapp4/',include('myapp4.urls',namespace='myapp4')),
     url(r'^blog/',include('blog.urls',namespace='blog')),
     url(r'^$',index,name='index'),
@@ -28,6 +28,10 @@ urlpatterns = [
     url(r'^loginout/',loginout,name='loginout'),
     url(r'^comments/',include('comments.urls',namespace='comments')),
     url(r'^register/',register,name='register'),
+    url(r'^wenku/',include('wenku.urls',namespace='wenku')),
+    url(r'^403page/',error403,name='403page'),
+    url(r'^404page/',error404,name='404page'),
+    url(r'^500page/',error500,name='500page'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL,document_root = settings.MEDIA_ROOT)

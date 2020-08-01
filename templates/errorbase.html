@@ -1,0 +1,91 @@
+<html><head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=11" id="mixia_vpid">
+   <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css"/>
+	<script src="/static/js/jquery-3.4.1-min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/static/js/bootstrap.js" type="text/javascript" charset="utf-8"></script>
+  <title>{%block title%}{%endblock title%}</title>
+  <meta name=keywords content="">
+  <meta name=description content="">
+  <link rel="stylesheet" href="/static/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/static/css/main.css">
+<script src="https://cdn.bootcss.com/clipboard.js/1.7.1/clipboard.min.js"></script>
+<style>
+    #foot{
+        transform:translateY(100px)
+    }
+
+</style>
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+<header class="panel-cover" style="background-image: url(/static/img/5f191edb8e10a.jpg)">
+
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a data-toggle="modal" data-target="#loginModal" title="联系作者" style="cursor:pointer"><img src="/static/img/few.jpg" width="150" alt="Noisky logo" class="panel-cover__logo logo"></a>
+        <h1 class="panel-cover__title panel-title"><a href="javascript:;" title="">404</a></h1>
+
+
+        <hr class="panel-cover__divider">
+        <p class="panel-cover__description">{%block errorcontent%}{%endblock errorcontent%}</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <p class="panel-cover__description">欢迎来到我的个人里世界!</p>
+
+<p class="footer" id="foot"> © 2020  |  <a style="TEXT-DECORATION: none" href="javascript:;" rel="nofollow" target="_blank"><font color="#b3b3b3">zyh</font></a></p>
+
+
+        <div class="navigation-wrapper">
+          <div>
+             <nav class="cover-navigation cover-navigation--primary" style="margin-left:30px;">
+                          <ul class="navigation">
+                            <li class="navigation__item"><a href="{%url 'blog:allblogs'%}" title="访问博客">博客</a></li>
+
+                            <li class="navigation__item"><a href="{%url 'wenku:wenkuindex'%}" title="文库下载">文库</a></li>
+
+                            <li class="navigation__item"><a href="" title="未定">未定</a></li>
+
+                            <li class="navigation__item"><a href="" title="未定">未定</a></li>
+
+                            <li class="navigation__item"><a href="" title="未定">未定</a></li>
+                          </ul>
+                        </nav>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="panel-cover--overlay cover-slate"></div>
+  </div>
+
+</header>
+        <div class="container">
+    <div class="modal fade bs-example-modal-lg" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		  <div class="modal-dialog modal-md" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        <h4 class="modal-title" id="myModalLabel">QQ二维码</h4>
+		      </div>
+				<div class="modal-body">
+        <img src="/static/img/QRcode.jpg">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+      </div>
+
+		    </div>
+		  </div>
+		</div>
+</div>
+<script type="text/javascript" src="https://static.noisky.cn/homepage/jquery-1.11.3.min.js"></script>
+</body></html>
