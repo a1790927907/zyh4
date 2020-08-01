@@ -6,6 +6,7 @@ from docx.shared import Pt
 from docx.shared import Inches
 from docx.oxml.ns import qn
 from docx.enum.text import WD_ALIGN_PARAGRAPH
+import time
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36"
 }
@@ -43,6 +44,7 @@ def getdocwithtxt(url):
     if len(trueurllist) == int(pagenum)*2:
         trueurllist = trueurllist[:int(len(trueurllist)/2)]
     result = ""
+    title = time.time()
     for fomaturl in trueurllist:
         resformat = requests.get(fomaturl,headers=headers).text
         jsonstr = re.findall(r'wenku_[0-9]+\((.*)\)',resformat)[0]
@@ -103,6 +105,7 @@ def getdocwithword(url):
     if len(trueurllist) == int(pagenum)*2:
         trueurllist = trueurllist[:int(len(trueurllist)/2)]
     result = ""
+    title = time.time()
     for fomaturl in trueurllist:
         resformat = requests.get(fomaturl,headers=headers).text
         jsonstr = re.findall(r'wenku_[0-9]+\((.*)\)',resformat)[0]
