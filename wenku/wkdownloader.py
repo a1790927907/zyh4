@@ -44,7 +44,7 @@ def getdocwithtxt(url):
     if len(trueurllist) == int(pagenum)*2:
         trueurllist = trueurllist[:int(len(trueurllist)/2)]
     result = ""
-    title = time.time()
+    title = int(time.time())
     for fomaturl in trueurllist:
         resformat = requests.get(fomaturl,headers=headers).text
         jsonstr = re.findall(r'wenku_[0-9]+\((.*)\)',resformat)[0]
@@ -105,7 +105,7 @@ def getdocwithword(url):
     if len(trueurllist) == int(pagenum)*2:
         trueurllist = trueurllist[:int(len(trueurllist)/2)]
     result = ""
-    title = time.time()
+    title = int(time.time())
     for fomaturl in trueurllist:
         resformat = requests.get(fomaturl,headers=headers).text
         jsonstr = re.findall(r'wenku_[0-9]+\((.*)\)',resformat)[0]
