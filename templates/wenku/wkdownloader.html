@@ -107,6 +107,7 @@ body{margin-top:72px;margin-bottom:72px}
 {%block jsextend%}
 	<script type="text/javascript">
 		$(function(){
+				var count = 0
 				function formatstr(str,data){
 						var newdata = str.split('&')
 						for(var i = 0;i<newdata.length;i++){
@@ -114,6 +115,12 @@ body{margin-top:72px;margin-bottom:72px}
 						}
 				}
 				$('#parsewk').submit(function(){
+						var $parsebtn = $('#parse')
+						timer = setInterval(function(){
+								count += 1
+								$parsebtn.html(count + 's')
+						},1000)
+						$parsebtn.addClass('disabled')
 						var data = {}
 						formatstr($(this).serialize(),data)
 						var $wktype = $('[name="wktype"]')
@@ -144,6 +151,10 @@ body{margin-top:72px;margin-bottom:72px}
 										setTimeout(function(){
 											$span.remove()
 										},2000)*/
+										clearInterval(timer)
+										$parsebtn.html('解析')
+										$parsebtn.removeClass('disabled')
+										count = 0
 										window.location.href = '{%url '403page'%}'
 									}
 							},
@@ -152,6 +163,10 @@ body{margin-top:72px;margin-bottom:72px}
 										$span.css('font-size','30px')
 										$span.css('color','crimson')
 										$('#dangersupport').after($span)
+										clearInterval(timer)
+										$parsebtn.html('解析')
+										$parsebtn.removeClass('disabled')
+										count = 0
 										setTimeout(function(){
 											$span.remove()
 										},9000)
@@ -165,6 +180,10 @@ body{margin-top:72px;margin-bottom:72px}
 							data:data,
 							success:function(data){
 									if(data.status == 'success'){
+											clearInterval(timer)
+											$parsebtn.html('解析')
+											$parsebtn.removeClass('disabled')
+											count = 0
 											window.location.href = data.downloadurl
 
 									}else{
@@ -172,6 +191,10 @@ body{margin-top:72px;margin-bottom:72px}
 										$span.css('font-size','30px')
 										$span.css('color','crimson')
 										$('#dangersupport').after($span)
+										clearInterval(timer)
+										$parsebtn.html('解析')
+										$parsebtn.removeClass('disabled')
+										count = 0
 										setTimeout(function(){
 											$span.remove()
 										},3000)
@@ -179,6 +202,10 @@ body{margin-top:72px;margin-bottom:72px}
 									}
 							},
 							error:function(xhr){
+									clearInterval(timer)
+									$parsebtn.html('解析')
+									$parsebtn.removeClass('disabled')
+									count = 0
 									window.location.href = '{%url '500page'%}'
 							},
 						})

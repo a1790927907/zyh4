@@ -67,6 +67,7 @@ def getdocwithtxt(url):
                 '''
             except:
                 continue
+    result = result.replace('百度文库','').replace('让每个人平等地提升自我','')
     with open(f'./static_all/file/{title}.txt',"w",encoding="utf-8") as f:
         f.write(result)
     return ('success',title)
@@ -127,6 +128,7 @@ def getdocwithword(url):
                 '''
             except:
                 continue
+    result = result.replace('百度文库', '').replace('让每个人平等地提升自我', '').replace('\n\n\n\n\n','')
     document = Document()
     # 加入不同等级的标题
     head = document.add_heading('', 1)
