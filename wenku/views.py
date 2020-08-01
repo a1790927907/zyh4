@@ -28,14 +28,12 @@ def documents(request):
     response['Content-Type'] = 'application/octet-stream'
     from django.utils.http import urlquote
     response['Content-Disposition'] = 'attachment;filename="%s"' % (urlquote(title))
-    file.close()
-    os.remove(f"{title}")
     return response
 
 def removefile(request):
-    for i,j,k in os.walk(f"static_all/file"):
+    for i,j,k in os.walk("."):
         for filename in k:
-            os.remove(f"static_all/file/{filename}")
+            os.remove(f"{filename}")
     return JsonResponse({'status':'removesuccess'})
 
 
