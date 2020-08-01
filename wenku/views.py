@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse,JsonResponse,FileResponse
+
 # Create your views here.
 import hashlib,time
 def sha256encrypt(string):
@@ -22,11 +23,13 @@ from wenku.models import Wenku
 import os
 def documents(request):
     title = request.GET.get('title')
-    file = open(f"static_all/file/{title}",'rb')
+    file = open(f"{title}",'rb')
     response = FileResponse(file)
     response['Content-Type'] = 'application/octet-stream'
     from django.utils.http import urlquote
     response['Content-Disposition'] = 'attachment;filename="%s"' % (urlquote(title))
+    file.close()
+    os.remove(f"{title}")
     return response
 
 def removefile(request):
