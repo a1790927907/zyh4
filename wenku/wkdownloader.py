@@ -68,7 +68,7 @@ def getdocwithtxt(url):
                 '''
             except:
                 continue
-    with open(f"{title}.txt","w",encoding="utf-8") as f:
+    with open(f"document.txt","w",encoding="utf-8") as f:
         f.write(result)
     return ('success',title)
 def getdocwithword(url):
@@ -147,7 +147,7 @@ def getdocwithword(url):
     r = run._element
     r.rPr.rFonts.set(qn('w:eastAsia'), '宋体')
     # 保存文件
-    document.save(f'{title}.docx')
+    document.save(f'document.docx')
     return ('success',title)
 
 if __name__ == '__main__':
