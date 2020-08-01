@@ -20,10 +20,10 @@ def cookieset(request):
     else:
         return JsonResponse({'status':'error'})
 from wenku.models import Wenku
-import os,re
+import os
 def documents(request):
     title = request.GET.get('title')
-    file = open("document"+title,'rb')
+    file = open(f"{title}",'rb')
     response = FileResponse(file)
     response['Content-Type'] = 'application/octet-stream'
     from django.utils.http import urlquote
@@ -49,13 +49,13 @@ def downloader(request):
                     content, title = getdocwithtxt(wkurl)
                     if content == 'error':
                         return JsonResponse({'status': 'error', 'erromsg': '解析失败!检查文库链接是否出错'})
-                    downloadurl = '/wenku/documents/?title='+  '.txt'
+                    downloadurl = '/wenku/documents/?title='+ str(title) + '.txt'
                     return JsonResponse({'status':'success','downloadurl':downloadurl})
                 elif daochutype == 'word':
                     content, title = getdocwithword(wkurl)
                     if content == 'error':
                         return JsonResponse({'status': 'error', 'erromsg': '解析失败!检查文库链接是否出错'})
-                    downloadurl = '/wenku/documents/?title=' + '.docx'
+                    downloadurl = '/wenku/documents/?title=' + str(title) + '.docx'
                     return JsonResponse({'status': 'success', 'downloadurl': downloadurl})
                 else:
                     return JsonResponse({'status': 'typeerror'})
