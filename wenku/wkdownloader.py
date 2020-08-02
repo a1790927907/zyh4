@@ -113,7 +113,7 @@ def getdocwithword(url):
         for text in jsondata["body"]:
             try:
                 if text["c"] == " ":
-                    result += "\n\n"
+                    result += "\n"
                 else:
                     result += text["c"]
                 '''
