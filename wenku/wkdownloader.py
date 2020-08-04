@@ -52,7 +52,7 @@ def getdocwithtxt(url):
         for text in jsondata["body"]:
             try:
                 if text["c"] == " ":
-                    result += "\n\n"
+                    result += "\r\n\r\n"
                 else:
                     result += text["c"]
                 '''
