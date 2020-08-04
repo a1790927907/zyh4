@@ -6,7 +6,7 @@ from docx.shared import Pt
 from docx.shared import Inches
 from docx.oxml.ns import qn
 from docx.enum.text import WD_ALIGN_PARAGRAPH
-import time
+import time,os
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36"
 }
@@ -68,6 +68,8 @@ def getdocwithtxt(url):
             except:
                 continue
     result = result.replace('百度文库','').replace('让每个人平等地提升自我','')
+    if os.path.exists(f'./static_all/file/{title}.txt'):
+        os.remove(f'./static_all/file/{title}.txt')
     with open(f'./static_all/file/{title}.txt',"w",encoding="utf-8") as f:
         f.write(result)
     return ('success',title)
@@ -147,7 +149,12 @@ def getdocwithword(url):
     r = run._element
     r.rPr.rFonts.set(qn('w:eastAsia'), '宋体')
     # 保存文件
-    document.save(f'./static_all/file/{title}.docx')
+    if os.path.exists(f'./static_all/file/{title}.docx'):
+        os.remove(f'./static_all/file/{title}.docx')
+    try:
+        document.save(f'./static_all/file/{title}.docx')
+    except:
+        document.save(f'./static_all/file/{title}.docx')
     return ('success',title)
 
 if __name__ == '__main__':
