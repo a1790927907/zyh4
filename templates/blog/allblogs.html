@@ -119,7 +119,7 @@ active
 			      </li>
 					{%else%}
 					 <li>
-			        <a href="{%url 'blog:allblogs'%}?page={{i|add:1}}&year={{year}}&month={{month}}&day={{day}}" aria-label="Next">
+			        <a href="{%url 'blog:allblogs'%}?page={{page|add:1}}&year={{year}}&month={{month}}&day={{day}}" aria-label="Next">
 			          <span aria-hidden="true">&raquo;</span>
 			        </a>
 			      </li>
