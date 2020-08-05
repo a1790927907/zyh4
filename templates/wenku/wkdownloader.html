@@ -115,6 +115,28 @@ body{margin-top:72px;margin-bottom:72px}
 {%block jsextend%}
 	<script type="text/javascript">
 		$(function(){
+				var isiOs = false;
+
+				var isAndroid = false;
+
+				var isWindowsPhone = false;
+
+				if(/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
+
+				  isiOS = true;
+
+				} else if(/(Android)/i.test(navigator.userAgent)) {
+
+				  isAndroid = true;
+
+				} else if(/(Windows Phone)/i.test(navigator.userAgent)) {
+
+				 isWindowsPhone = true;
+
+				}
+				if(isiOs || isAndroid || isWindowsPhone){
+						$('.panel_1').css('width','100%')
+				}
 				var count = 0
 				function formatstr(str,data){
 						var newdata = str.split('&')
