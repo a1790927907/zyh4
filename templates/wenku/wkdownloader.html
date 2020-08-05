@@ -1,4 +1,4 @@
-{%extends 'blogbase.html'%}
+{%extends 'allbase.html'%}
 {%block title%}
 文库下载工具
 {%endblock title%}
@@ -68,6 +68,14 @@ body{margin-top:72px;margin-bottom:72px}
 .danxuan:checked ~ .danxuan:active {
   background-position: 0 -24px;
 }
+.footer1 {
+	position: absolute;
+	bottom: 0;
+	left: 45%;
+	width: 100%;
+	color: #b3b3b3;
+	font-size: .7em;
+}
 	</style>
 {%endblock headerextend%}
 
@@ -98,7 +106,7 @@ body{margin-top:72px;margin-bottom:72px}
 <div style="text-align:center;clear:both">
 
 </div>
-
+		<p class="footer1"> © ZYH  |  <a style="TEXT-DECORATION: none" rel="nofollow" target="_blank" href="http://www.beian.miit.gov.cn/"><font color="#b3b3b3">沪ICP备20024126号-1</font></a></p>
 </div>
 
 {%endblock content%}
