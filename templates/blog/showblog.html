@@ -37,7 +37,7 @@ active
 
 			 <p style="text-align: center; font-size: 20px;"><span style="padding: 20px;">作者:{{blog.author}}</span>
 			 <span style="padding: 20px;">分类:<a href="{%url 'blog:showtype'%}?type={{blog.blogtype}}&page=1">{{blog.blogtype}}</a></span>
-			 <span style="padding: 20px;">发布日期:{{blog.updatetime}}</span><span class="markcount" style="padding: 20px;">评论数:{{commentscount|length}}</span></p>
+			 <span style="padding: 20px;">发布日期:{{blog.createtime}}</span><span class="markcount" style="padding: 20px;">评论数:{{commentscount|length}}</span></p>
 			  <p style="text-align: center; font-size: 20px;">
 				    <span style="padding-left:10px" numid="{{blog.id}}">点赞数:({{blog.bappreciatenum}})</span>
 			  {%if blog|has_appreciate:request%}
@@ -248,7 +248,7 @@ active
 										*/
 
 											}else{
-												$newele = $('<span>'+ user + '('+ uploadtime +')说:'+  comment +'</span>')
+												$newele = $('<span>用户名:'+ user + '('+ uploadtime +')说:'+  comment +'</span>')
 												$newele.addClass('' + data.id)
 												var $div = $('<div></div>')
 												$div.addClass('' + data.id)

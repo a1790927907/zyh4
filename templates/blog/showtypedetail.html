@@ -29,7 +29,7 @@ active
 			<span class="glyphicon glyphicon-tag" aria-hidden="true"></span>
 			<span><a href="{%url 'blog:showtype'%}?type={{blog.blogtype}}&page=1">{{blog.blogtype}}</a></span>
 			<span class="glyphicon glyphicon-time" aria-hidden="true"></span>
-			<span>{{blog.updatetime|date:'Y-m-d H:m:s'}}</span>
+			<span>{{blog.createtime|date:'Y-m-d H:m:s'}}</span>
 			  <span style="padding-left:10px">评论数:({{blog|getmarkcount|length}})</span>
 			  <span style="padding-left:10px" numid="{{blog.id}}">点赞数:({{blog.bappreciatenum}})</span>
 			   {%if blog|has_appreciate:request%}
