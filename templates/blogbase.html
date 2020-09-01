@@ -34,7 +34,8 @@
 		        <li class="{%block indexactive%}{%endblock indexactive%}"><a href="{%url 'index'%}">首页<span class="sr-only">(current)</span></a></li>
 				<li class="{%block blogactive%}{%endblock blogactive%}"><a href="{%url 'blog:allblogs'%}">博客</a></li>
 				  <li class="{%block wenkuactive%}{%endblock wenkuactive%}"><a href="{%url 'wenku:wenkuindex'%}">文库下载</a></li>
-		      </ul>
+		      	<li class="{%block musicactive%}{%endblock musicactive%}"><a href="{%url 'music:mindex'%}">音乐下载</a></li>
+			  </ul>
 			{%if user.is_authenticated%}
 				<form action="{%url 'loginout'%}?from={{request.get_full_path}}" method="post" class="navbar-form navbar-left pull-right">
 					{%csrf_token%}

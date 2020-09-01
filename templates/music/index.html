@@ -1,0 +1,47 @@
+{%extends 'allbase.html'%}
+{%block title%}
+音乐下载
+{%endblock title%}
+{%block headerfirstextend%}
+<link rel="stylesheet" type="text/css" href="/static/css/mcss.css"/>
+{%endblock headerfirstextend%}
+{%block musicactive%}
+active
+{%endblock musicactive%}
+{%block content%}
+<div class="container">
+	<div id="musicbox">
+		<div class="form">
+		  <div class="murl">
+		    <input type="text" name="musicurln" placeholder="URL" id="musicurl" required/>
+		  </div>
+		  <div class="mt">
+			  <div style="height: 2em;">
+
+			  </div>
+		    <div class="col-sm-4 col-sm-offset-2 col-xs-4 col-xs-offset-2">
+		    	<input type="radio" name="mtype" id="qm" value="qqmusic" /><span id="qms">QQ音乐</span>
+
+		    </div>
+			<div class="col-sm-5 col-xs-5">
+					<input type="radio" name="mtype" id="wm" value="wyymusic" checked="checked" /><span id="wms">网易云音乐</span>
+
+			</div>
+
+		  </div>
+		  <div class="mparse">
+		    <span id="parse">解析</span>
+		  </div>
+		</div>
+	</div>
+</div>
+{%endblock content%}
+{%block jsextend%}
+<script>
+	var csrfmiddlewaretoken = '{{csrf_token}}'
+	var url = '{%url 'music:getmurl'%}'
+	var url403 = '{%url '403page'%}'
+	var url500 = '{%url '500page'%}'
+</script>
+<script src="/static/js/music.js" type="text/javascript" charset="utf-8"></script>
+{%endblock jsextend%}
