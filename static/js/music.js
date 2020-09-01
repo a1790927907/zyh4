@@ -611,7 +611,7 @@ $(function(){
               }
             },
             error:function(xhr){
-
+                window.location.href = url500
             },
         })
         setTimeout(function(){
