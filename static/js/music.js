@@ -580,7 +580,6 @@ $(function(){
                 }else{
                     songmid = songmid[0].replace('songmid=','').replace('#','')
                 }
-                console.log(songmid)
                 var e = {"req_0":{"module":"vkey.GetVkeyServer","method":"CgiGetVkey","param":{"guid":"3428190121","songmid":[songmid],"songtype":[0],"uin":"0","loginflag":0,"platform":"23","h5to":"speed"}},"comm":{"g_tk":5381,"uin":0,"format":"json","platform":"h5"}}
             }
             data.sekey = getsign(e)

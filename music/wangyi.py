@@ -16,6 +16,7 @@ def becomevalid(filename):
     return changed_name
 
 def getmusicurl(songid):
+    os.environ["EXECJS_RUNTIME"] = "Node"
     class PrpCrypt(object):
         def __init__(self, key, iv):
             self.key = key.encode('utf-8')
@@ -531,8 +532,9 @@ def getmusicurl(songid):
                     highBitMasks = new Array(0,32768,49152,57344,61440,63488,64512,65024,65280,65408,65472,65504,65520,65528,65532,65534,65535),
                     lowBitMasks = new Array(0,1,3,7,15,31,63,127,255,511,1023,2047,4095,8191,16383,32767,65535);
                     setMaxDigits(131)'''
-    aeskey = execjs.compile(jscmd)
-    rsaencrypt = execjs.compile(jscmd1)
+    node = execjs.get(execjs.runtime_names.Node)
+    aeskey = node.compile(jscmd)
+    rsaencrypt = node.compile(jscmd1)
     paramslist = aeskey.call("getaeskey")
     i = aeskey.call("geti",16)
     paramslist.append(i)
