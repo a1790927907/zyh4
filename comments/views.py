@@ -63,6 +63,13 @@ def removemark(request):
         commentid  =  request.GET.get('id')
     comment = Comments.commentmanager.get(id=int(commentid))
     if (request.user.username == comment.user.username) and request.user.is_authenticated():
+        try:
+            all_mark_list = comment.parent_comment.all()
+            for son_mark in all_mark_list:
+                son_mark.isdelete = True
+                son_mark.save()
+        except:
+            pass
         comment.isdelete = True
         comment.save()
         data = {}
