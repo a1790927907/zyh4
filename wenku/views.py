@@ -12,7 +12,7 @@ def wenkuindex(request):
     return render(request,'wenku/wkdownloader.html')
 
 def cookieset(request):
-    if request.user.is_superuser and request.user.is_authenticated and (request.method == 'POST'):
+    if request.method == 'POST':
         response = JsonResponse({'status':'success'})
         response.set_cookie('secretkey',sha256encrypt(str(time.time()) + '%$[djoLosKK}{]'))
         request.session['secretkey'] = response.cookies['secretkey'].value
