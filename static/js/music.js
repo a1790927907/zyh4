@@ -605,6 +605,14 @@ $(function(){
                 setTimeout(function(){
                     $span.remove()
                 },25000)
+              }else if(data.status==='url empty' || data.status === 'type empty'){
+                $warn = $('<span>'+ data.status +'</span>')
+                $warn.css('color','red')
+                $warn.css('font-size','18px')
+                $('.form').append($warn)
+                setTimeout(function(){
+                    $warn.remove()
+                },25000)
               }else{
                 window.location.href = url403
               }
