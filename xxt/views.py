@@ -180,7 +180,7 @@ def createvcode(request):
         vcode += code_str[random.randrange(0,len(code_str))]
     request.session['vcodeverify'] = vcode
     #设置字体
-    font = ImageFont.truetype(r'C:\Windows\Fonts\ARIAL.TTF',40)
+    font = ImageFont.truetype('DejaVuSerif.ttf',40)
     #开始写内容
     color1 = (random.randrange(0,255),random.randrange(0,255),random.randrange(0,255))
     color2 = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
