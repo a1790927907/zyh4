@@ -33,6 +33,7 @@ urlpatterns = [
     url(r'^404page/',error404,name='404page'),
     url(r'^500page/',error500,name='500page'),
     url(r'^music/',include('music.urls',namespace='music')),
+    url(r'^xxt/',include('xxt.urls',namespace='xxt')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL,document_root = settings.MEDIA_ROOT)

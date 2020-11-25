@@ -1,0 +1,43 @@
+{%extends 'xxt_base.html'%}
+
+{%block meta%}
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+{%endblock meta%}
+
+{%block title%}
+xxt
+{%endblock title%}
+
+
+{%block css_file_extend%}
+<link rel="stylesheet" type="text/css" href="/static/css/xxt_showscore.css"/>
+{%endblock css_file_extend%}
+
+{%block content%}
+<input type="hidden" id="c" value="{{c_enc}}">
+<table id="mytable" cellspacing="0">
+		<caption> </caption>
+		<tr>
+		<th scope="col" abbr="学生姓名" class="nobg">学生姓名</th> <th scope="col" abbr="考试名称">考试名称</th>
+
+		<th scope="col" abbr="批卷人">批卷人</th>
+			<th scope="col" abbr="试卷总分">试卷总分</th>
+		<th scope="col" abbr="考试成绩">考试成绩</th>
+		</tr>
+
+{%endblock content%}
+
+{%block js_extend%}
+<script type="text/javascript">
+	var url = "{%url 'xxt:get_score_data'%}"
+	var csrf = "{{csrf_token}}"
+	var ip = "{{ip}}"
+</script>
+{%endblock js_extend%}
+
+{%block js_file_extend%}
+<script src="/static/js/xxt_score.js" type="text/javascript" charset="utf-8"></script>
+{%endblock js_file_extend%}
+
+
+

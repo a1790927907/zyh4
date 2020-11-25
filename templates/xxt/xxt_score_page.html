@@ -1,0 +1,138 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>xxt</title>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport" />
+    <script src="/static/js/jquery-3.4.1-min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/static/js/jquery-cookie.js" type="text/javascript" charset="utf-8"></script>
+	<style type="text/css">
+		#box{
+			background-image: url(/static/img/musicbg.jpg);
+			display: block;
+			width: 100%;
+			height: 100%;
+			background-repeat: no-repeat;
+			background-size: cover;
+			background-position: center;
+			position: absolute;
+			left: 0;
+			top: 0;
+			overflow: hidden;
+			opacity: 1;
+			transition: 1s ease opacity;
+		}
+		#myf {
+		height: 100px;
+		padding: 0;
+		margin: 0;
+		position: absolute;
+		            top: 40%;
+		            left: 50%;
+		            -webkit-transform: translate(-50%, -50%);
+		            -moz-transform: translate(-50%, -50%);
+		            -ms-transform: translate(-50%, -50%);
+		            -o-transform: translate(-50%, -50%);
+		            transform: translate(-50%, -50%);
+		}
+	</style>
+	<link href="/static/css/xxt_score.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+
+<div id="box">
+
+
+            <div class="aui-ver-form" id="myf">
+
+                <form action="/xxt/getscore" method="post" id="myform">
+                	<div class="aui-flex">
+                	    <div class="aui-flex-box">
+
+                	        <input id="course_url" type="text" autocomplete="off" placeholder="课程url" required>
+                	    </div>
+                	</div>
+                	<div class="aui-flex">
+                	    <div class="aui-flex-box">
+
+                	        <input id="code1" type="text" autocomplete="off" placeholder="验证码" required>
+                	    </div>
+                	    <div class="aui-button-code">
+                	        <img src="" id="vcode" style="height:2.2rem;">
+                	    </div>
+                	</div>
+                	<div class="aui-ver-button">
+                	    <button type="submit" id="get_s">获取成绩</button>
+                	</div>
+                </form>
+
+            </div>
+</div>
+
+</body>
+<script type="text/javascript">
+	$(function(){
+		csrf = "{{csrf_token}}"
+		var $vcode = $("#vcode")
+		change_code()
+		function change_code(){
+			var url = '/xxt/vcode' + "?_=" + new Date().getTime()
+			$vcode.attr("src",url)
+		}
+		$vcode.bind("click",change_code)
+
+		var $myform = $("#myform")
+		var data = {}
+
+		data.csrfmiddlewaretoken = csrf
+		var $span = $("<span>验证码错误</span>")
+		$span.css("color","red")
+		$span.css("float","right")
+		$span.css("transform","translate(-10px, -20px)")
+		$span.css("font-size","25px")
+
+		$myform.submit(function(){
+			$span.remove()
+			data.n = $.cookie("n");
+			var a = document.cookie + ";"
+			var se = a.match(/se_key=(.*?);/)[1]
+			se = se.replace(/"/g,"")
+			data.se_key = se;
+			data.course_url = $("#course_url").val()
+			data.vcode = $("#code1").val()
+			$.ajax({
+				type:"post",
+				url: $myform.attr("action"),
+				data:data,
+				success:function(data){
+					if (data.status == 0){
+						if (data.error != "验证码错误"){
+							alert(data.error)
+						}else{
+							var $div = $(".aui-ver-button")
+							$div.prepend($span)
+						}
+
+					}else{
+						var $s = $("#get_s")
+						$s.html("获取成功，正在跳转，请勿操作。。。")
+						$s.addClass("disabled")
+						setTimeout(function(){
+							$s.html("获取成绩")
+							change_code()
+							$s.removeClass("disabled")
+							window.open(data.url)
+						},2000)
+					}
+				},
+				error:function(xhr){
+
+				}
+			})
+			return false;
+		})
+	})
+</script>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+{%block meta%}{%endblock meta%}
+<title>{%block title%}{%endblock title%}</title>
+<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css"/>
+<script src="/static/js/jquery-3.4.1-min.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+<style type="text/css">
+body {
+font: normal 11px auto "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+color: #4f6b72;
+background: #E6EAE9;
+}
+#box{
+	background-image: url(/static/img/musicbg.jpg);
+	display: block;
+	width: 100%;
+	height: 100%;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+	position: absolute;
+	left: 0;
+	top: 0;
+	overflow: hidden;
+	opacity: 1;
+	transition: 1s ease opacity;
+}
+
+{%block css_extend%}
+{%endblock css_extend%}
+</style> </head>
+{%block css_file_extend%}
+{%endblock css_file_extend%}
+<body>
+
+	<div id="box">
+		 {%block content%}
+        {%endblock content%}
+	</div>
+
+
+</body>
+{%block js_extend%}
+{%endblock js_extend%}
+{%block js_file_extend%}
+{%endblock js_file_extend%}
+</html>

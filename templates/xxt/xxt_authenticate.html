@@ -1,0 +1,47 @@
+{%extends 'xxt_base.html'%}
+
+{%block meta%}
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+{%endblock meta%}
+
+{%block title%}
+xxt
+{%endblock title%}
+
+{%block css_extend%}
+#mybutton {
+height: 75px;
+padding: 0;
+margin: 0;
+position: absolute;
+            top: 50%;
+            left: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            -moz-transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            -o-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+}
+{%endblock css_extend%}
+
+{%block content%}
+<button type="button" id="mybutton" class="btn btn-primary btn-lg">点我验证</button>
+{%endblock content%}
+
+{%block js_extend%}
+<script type="text/javascript">
+	var csrf = "{{csrf_token}}"
+</script>
+{%endblock js_extend%}
+
+{%block js_file_extend%}
+<script src="/static/js/xxt_auth.js" type="text/javascript" charset="utf-8"></script>
+{%endblock js_file_extend%}
+
+
+
+
+
+
+
+
