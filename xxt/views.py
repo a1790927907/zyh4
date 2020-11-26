@@ -150,8 +150,10 @@ def get_all_score_data(request):
             courseid,classid,cpi = d_2.split(',')
         except:
             return JsonResponse({'status': 0, 'error':'params error'})
-
-        all_data = fetch_person_score(courseid,classid,cpi)
+        try:
+            all_data = fetch_person_score(courseid,classid,cpi)
+        except:
+            return render(request,'500.html')
         return JsonResponse({'status':1,'data':all_data})
     else:
         return JsonResponse({'status': 0, 'error': 'method error'})
