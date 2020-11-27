@@ -52,7 +52,7 @@ async def _fetch_person_score(courseid,classid,cpi):
     all_data = []
     while True:
         data_task = asyncio.create_task(fetch_data_info(courseid,classid,cpi,headers,page))
-        if name:
+        if not name:
             name = await name_task
         data = await data_task
         if data == []:
