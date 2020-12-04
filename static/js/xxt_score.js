@@ -13,7 +13,7 @@ $(function(){
                     alert(data.error)
                 }else{
                     all_data = data.data
-                    if (all_data){window.location.href = error_page;}
+                    if (!all_data){window.location.href = error_page;}
                     for (i in all_data){
                         stu_data = all_data[i]
                         var $tr = $("<tr></tr>")
