@@ -158,40 +158,55 @@ def get_all_score_data(request):
     else:
         return JsonResponse({'status': 0, 'error': 'method error'})
 
-def get_data(token,url,auth_key):
-    if token == auth_key:
-        if url:
-            try:
-                course_url_bak = url + '&'
-                courseid = re.findall(r'courseId=(.*?)&', course_url_bak, re.I)[0]
-                try:
-                    classid = re.findall(r'clazzid=(.*?)&', course_url_bak, re.I)[0]
-                except:
-                    classid = re.findall(r'classid=(.*?)&', course_url_bak, re.I)[0]
-                cpi = re.findall(r'cpi=(.*?)&', course_url_bak, re.I)[0]
-                try:
-                    all_data = fetch_person_score(courseid, classid, cpi)
-                    return JsonResponse({'status': 1, 'data': all_data})
-                except:
-                    return JsonResponse({'status': 0, 'error': '请联系管理员'})
-
-            except:
-                return JsonResponse({'status': 0, 'error': 'please check your course url'})
-        else:
-            return JsonResponse({'status': 0, 'error': 'empty url'})
-    else:
-        return JsonResponse({'status': 0, 'error': 'token error'})
-
-
+from django.views.decorators.csrf import csrf_exempt
+@csrf_exempt
 def private_score_page(request):
     if request.method == "POST":
         token = request.POST.get("token","")
         url = request.POST.get("url", "")
-        get_data(token,url,"9eef43b46e423f88c9837b206da1b25d")
+        # get_data(token,url,"9eef43b46e423f88c9837b206da1b25d")
+        auth_key = "9eef43b46e423f88c9837b206da1b25d"
+        if token == auth_key:
+            if url:
+                try:
+                    course_url_bak = url + '&'
+                    courseid = re.findall(r'courseId=(.*?)&', course_url_bak, re.I)[0]
+                    try:
+                        classid = re.findall(r'clazzid=(.*?)&', course_url_bak, re.I)[0]
+                    except:
+                        classid = re.findall(r'classid=(.*?)&', course_url_bak, re.I)[0]
+                    cpi = re.findall(r'cpi=(.*?)&', course_url_bak, re.I)[0]
+                    try:
+                        all_data = fetch_person_score(courseid, classid, cpi)
+                        return JsonResponse({'status': 1, 'data': all_data})
+                    except:
+                        return JsonResponse({'status': 0, 'error': '请联系管理员'})
+
+                except:
+                    return JsonResponse({'status': 0, 'error': 'please check your course url'})
+            else:
+                return JsonResponse({'status': 0, 'error': 'empty url'})
+        else:
+            return JsonResponse({'status': 0, 'error': 'token error'})
     else:
         token = request.GET.get("token","")
-        url = request.GET.get("url","")
-        get_data(token,url,"zyh123456")
+        params = request.GET.get("params","")
+        if token == "zyh123456":
+            if params:
+                try:
+                    courseid,classid,cpi = params.split(",")
+                    try:
+                        all_data = fetch_person_score(courseid, classid, cpi)
+                        return JsonResponse({'status': 1, 'data': all_data})
+                    except:
+                        return JsonResponse({'status': 0, 'error': '请联系管理员'})
+
+                except:
+                    return JsonResponse({'status': 0, 'error': 'please check your params'})
+            else:
+                return JsonResponse({'status': 0, 'error': 'empty params'})
+        else:
+            return JsonResponse({'status': 0, 'error': 'token error'})
 
 
 def createvcode(request):
